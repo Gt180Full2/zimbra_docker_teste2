@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:7
 MAINTAINER Alan Denniston <alan.denniston@gmail.com>
 
 RUN yum update -y --nogpgcheck && yum install -y --nogpgcheck \
