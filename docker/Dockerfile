@@ -1,36 +1,39 @@
-#################################################################
-# Dockerfile to build Zimbra Collaboration 8.8 container images
-# Based on CentOS 7
-# Created by Alan Denniston
-#################################################################
 FROM centos:latest
 MAINTAINER Alan Denniston <alan.denniston@gmail.com>
 
 RUN yum update -y --nogpgcheck && yum install -y --nogpgcheck \
+  gmp \
+  libidn \ 
   wget \
-  dialog \
-  sqlite \
-  dnsmasq \
-  bind-utils \
+  nano \
+  make \
+  nc \
   sudo \
   sysstat \
+  libtool-ltdl \
+  glibc \
+  perl \
+  ntp \
+  libaio \
   unzip \
+  perl-core \
+  net-tools \
   perl \
   perl-core \
-  ntpl \
-  nmap \ 
-  libidn \
-  gmp \
-  libaio \ 
-  libstdc++ \ 
-  unzip \
+  screen \
+  w3m \
+  bind-utils \
+  nmap \
+  sed \
+  sysstat \
+  libaio \
+  rsync \
   telnet \
-  net-tools \
-  openssh \
-  openssh-server \
+  aspell \
+  vim \
   && yum clean all \
   && yum clean metadata
-VOLUME ["/opt/zimbra"]
+  VOLUME ["/opt/zimbra"]
 
 EXPOSE 22 25 465 587 110 143 993 995 80 443 8080 8443 7071
 
