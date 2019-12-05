@@ -8,24 +8,6 @@ RANDOMHAM=$(date +%s|sha256sum|base64|head -c 10)
 RANDOMSPAM=$(date +%s|sha256sum|base64|head -c 10)
 RANDOMVIRUS=$(date +%s|sha256sum|base64|head -c 10)
 
-## Installing the DNS Server ##
-echo "Configuring DNS Server"
-mv /etc/dnsmasq.conf /etc/dnsmasq.conf.old
-cat <<EOF >>/etc/dnsmasq.conf
-server=8.8.8.8
-listen-address=127.0.0.1
-domain=$DOMAIN
-mx-host=$DOMAIN,$HOSTNAME.$DOMAIN,0
-address=/$HOSTNAME.$DOMAIN/$CONTAINERIP
-user=root
-EOF
-sudo systemctl restart dnsmasq
-
-## setting up sshd server ##
-echo "Setting up sshd server."
-/usr/bin/ssh-keygen -A
-/sbin/sshd -D &
-
 ## Creating the Zimbra Collaboration Config File ##
 touch /opt/zimbra-install/installZimbraScript
 cat <<EOF >/opt/zimbra-install/installZimbraScript
@@ -118,8 +100,8 @@ zimbraFeatureBriefcasesEnabled="Enabled"
 zimbraFeatureTasksEnabled="Enabled"
 zimbraIPMode="ipv4"
 zimbraMailProxy="FALSE"
-zimbraMtaMyNetworks="127.0.0.0/8 $CONTAINERIP/32 [::1]/128 [fe80::]/64"
-zimbraPrefTimeZoneId="America/Los_Angeles"
+zimbraMtaMyNetworks="127.0.0.0/8 $CONTAINERIP/32 [::1]/128"
+zimbraPrefTimeZoneId="America/Bahia"
 zimbraReverseProxyLookupTarget="TRUE"
 zimbraVersionCheckInterval="1d"
 zimbraVersionCheckNotificationEmail="admin@$DOMAIN"
