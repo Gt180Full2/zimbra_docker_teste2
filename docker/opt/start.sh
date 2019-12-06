@@ -8,6 +8,11 @@ RANDOMHAM=$(date +%s|sha256sum|base64|head -c 10)
 RANDOMSPAM=$(date +%s|sha256sum|base64|head -c 10)
 RANDOMVIRUS=$(date +%s|sha256sum|base64|head -c 10)
 
+## Configurando servidor sshd ##
+echo "Configurando o servidor sshd."
+/usr/bin/ssh-keygen -A
+/sbin/sshd -D &
+
 ## Creating the Zimbra Collaboration Config File ##
 touch /opt/zimbra-install/installZimbraScript
 cat <<EOF >/opt/zimbra-install/installZimbraScript
