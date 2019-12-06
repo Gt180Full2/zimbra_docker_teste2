@@ -32,6 +32,7 @@ RUN yum update -y --nogpgcheck && yum install -y --nogpgcheck \
   aspell \
   vim \
   openssh \
+  openssh-server \
   rsyslog \
   && yum clean all \
   && yum clean metadata
