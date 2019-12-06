@@ -13,6 +13,51 @@ echo "Configurando o servidor sshd."
 /usr/bin/ssh-keygen -A
 /sbin/sshd -D &
 
+#Validar esse aqui
+## Configurando o syslog ##
+echo "Configurando o syslog."
+mv /etc/rsyslog.conf /etc/rsyslog.conf.old
+cat <<EOF >>/etc/rsyslog.conf
+$ModLoad imuxsock
+$ModLoad imjournal
+$ModLoad imudp
+$UDPServerRun 514
+$ModLoad imtcp
+$InputTCPServerRun 514
+$WorkDirectory /var/lib/rsyslog
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$IncludeConfig /etc/rsyslog.d/*.conf
+$OmitLocalLogging on
+$IMJournalStateFile imjournal.state
+*.info;local0.none;local1.none;mail.none;auth.none;authpriv.none;cron.none                /var/log/messages
+authpriv.*                                              /var/log/secure
+mail.*                                                  -/var/log/maillog
+mail.*                                                  -/var/log/maillog
+*.emerg                                                 :omusrmsg:*
+uucp,news.crit                                          /var/log/spooler
+local7.*                                                /var/log/boot.log
+local0.*                -/var/log/zimbra.log
+local1.*                -/var/log/zimbra-stats.log
+auth.*                  -/var/log/zimbra.log
+mail.*                -/var/log/zimbra.log
+EOF
+
+##Iniciando o rsyslogd
+/usr/sbin/rsyslogd -D &
+
+#Testando esse aqui!
+## Installing the DNS Server ##
+echo "Configuring DNS Server"
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.old
+cat <<EOF >>/etc/dnsmasq.conf
+server=187.18.5.7
+server=187.18.5.8
+listen-address=127.0.0.1
+domain=$DOMAIN
+mx-host=$DOMAIN,$HOSTNAME.$DOMAIN,0
+address=/$HOSTNAME.$DOMAIN/$CONTAINERIP
+EOF
+
 ## Creating the Zimbra Collaboration Config File ##
 touch /opt/zimbra-install/installZimbraScript
 cat <<EOF >/opt/zimbra-install/installZimbraScript
