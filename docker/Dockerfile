@@ -39,7 +39,7 @@ RUN yum update -y --nogpgcheck && yum install -y --nogpgcheck \
   && yum clean metadata
   VOLUME ["/opt/zimbra"]
 
-EXPOSE 22 25 54 465 587 110 143 993 995 80 443 8080 8443 7071 514
+EXPOSE 22 25 53 54 80 110 143 443 465 514 587 993 995 5822 7071 8080 8443
 
 COPY opt /opt/
 
