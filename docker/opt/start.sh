@@ -53,7 +53,7 @@ local0.*                -/var/log/zimbra.log
 local1.*                -/var/log/zimbra-stats.log
 auth.*                  -/var/log/zimbra.log
 mail.*                -/var/log/zimbra.log
-E0F
+EOF
 
 ##Iniciando DNS Masq
 /usr/sbin/dnsmasq -D &
