@@ -13,9 +13,6 @@ echo "Configurando o servidor sshd."
 /usr/bin/ssh-keygen -A
 /sbin/sshd -D &
 
-##Iniciando o rsyslogd
-/usr/sbin/rsyslogd -D &
-
 #Testando esse aqui!
 ## Installing the DNS Server ##
 echo "Configuring DNS Server"
