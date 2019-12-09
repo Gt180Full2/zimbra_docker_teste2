@@ -27,6 +27,37 @@ mx-host=$DOMAIN,$HOSTNAME.$DOMAIN,0
 address=/$HOSTNAME.$DOMAIN/$CONTAINERIP
 EOF
 
+##Colocando config do Rsyslog
+echo "Config Rsyslog"
+mv /etc/rsyslog.conf /etc/rsyslog.conf.old
+cat <<EOF >> /etc/rsyslog.conf
+$ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
+$ModLoad imjournal # provides access to the systemd journal
+$ModLoad imudp
+$UDPServerRun 514
+$ModLoad imtcp
+$InputTCPServerRun 514
+$WorkDirectory /var/lib/rsyslog
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$IncludeConfig /etc/rsyslog.d/*.conf
+$OmitLocalLogging on
+$IMJournalStateFile imjournal.state
+*.info;local0.none;local1.none;mail.none;auth.none;authpriv.none;cron.none                /var/log/messages
+authpriv.*                                              /var/log/secure
+mail.*                                                  -/var/log/maillog
+cron.*                                                  /var/log/cron
+*.emerg                                                 :omusrmsg:*
+uucp,news.crit                                          /var/log/spooler
+local7.*                                                /var/log/boot.log
+local0.*                -/var/log/zimbra.log
+local1.*                -/var/log/zimbra-stats.log
+auth.*                  -/var/log/zimbra.log
+mail.*                -/var/log/zimbra.log
+E0F
+
+##Iniciando DNS Masq
+/usr/sbin/dnsmasq -D &
+
 ## Creating the Zimbra Collaboration Config File ##
 touch /opt/zimbra-install/installZimbraScript
 cat <<EOF >/opt/zimbra-install/installZimbraScript
@@ -172,14 +203,14 @@ echo "Removing Install Files"
 cd ~
 rm -rf /opt/zimbra-install
 
-echo "Execultando Rsyslogd pro Zimbra"
-/opt/zimbra/libexec/zmsyslogsetup -D &
+#echo "Execultando Rsyslogd pro Zimbra"
+#/opt/zimbra/libexec/zmsyslogsetup -D &
 
 ##Iniciando o rsyslogd
-/usr/sbin/rsyslogd -D &
+#/usr/sbin/rsyslogd -D &
 
-echo "Restarting Zimbra 2"
-su - zimbra -c 'zmcontrol restart'
+#echo "Restarting Zimbra 2"
+#su - zimbra -c 'zmcontrol restart'
 
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
