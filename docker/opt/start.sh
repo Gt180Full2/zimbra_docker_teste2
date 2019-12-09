@@ -30,9 +30,6 @@ mx-host=$DOMAIN,$HOSTNAME.$DOMAIN,0
 address=/$HOSTNAME.$DOMAIN/$CONTAINERIP
 EOF
 
-##Iniciando dnsmasq
-/usr/sbin/dnsmasq -D &
-
 ## Creating the Zimbra Collaboration Config File ##
 touch /opt/zimbra-install/installZimbraScript
 cat <<EOF >/opt/zimbra-install/installZimbraScript
@@ -180,6 +177,9 @@ rm -rf /opt/zimbra-install
 
 echo "Execultando Rsyslogd pro Zimbra"
 /opt/zimbra/libexec/zmsyslogsetup -D &
+
+##Iniciando o rsyslogd
+/usr/sbin/rsyslogd -D &
 
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
