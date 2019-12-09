@@ -135,8 +135,8 @@ EOF
 
 ##Install the Zimbra Collaboration ##
 
-echo "Downloading Zimbra Collaboration 8.8.12"
-wget -O /opt/zimbra-install/zimbra.tar.gz https://files.zimbra.com/downloads/8.8.12_GA/zcs-8.8.12_GA_3794.RHEL7_64.20190329045002.tgz
+echo "Downloading Zimbra Collaboration 8.8.15"
+wget -O /opt/zimbra-install/zimbra.tar.gz https://files.zimbra.com/downloads/8.8.15_GA/zcs-8.8.15_GA_3869.RHEL7_64.20190918004220.tgz
 
 echo "Extracting files from the archive"
 tar xzvf /opt/zimbra-install/zimbra.tar.gz -C /opt/zimbra-install/
@@ -177,6 +177,9 @@ echo "Execultando Rsyslogd pro Zimbra"
 
 ##Iniciando o rsyslogd
 /usr/sbin/rsyslogd -D &
+
+echo "Restarting Zimbra 2"
+su - zimbra -c 'zmcontrol restart'
 
 if [[ $1 == "-d" ]]; then
   while true; do sleep 1000; done
